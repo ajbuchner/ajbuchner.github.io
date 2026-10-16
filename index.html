@@ -1,466 +1,66 @@
-<!DOCTYPE html>
-<!--
-  ACADEMIC HOMEPAGE — starter template
-  =====================================
-  How to customize:
-  1. Replace every [bracketed placeholder] with your own info.
-  2. Edit the bio paragraph in #about to describe yourself.
-  3. Add/remove <li> items in #publications and #teaching.
-  4. Swap the monogram circle for a real photo (see comment near .avatar).
-  5. Colors, fonts, and spacing are controlled by the CSS variables
-     at the top of the <style> block — change those to retheme the
-     whole page without touching anything else.
--->
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>[Your Name] — Academic Homepage</title>
-<meta name="description" content="Personal academic page of [Your Name], [Your Title] at [Your University].">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --paper: #F6F5F1;
-    --ink: #20201D;
-    --accent: #1D3557;
-    --muted: #6B6962;
-    --rule: #DEDAD2;
-
-    --font-display: 'Newsreader', Georgia, serif;
-    --font-body: 'Inter', -apple-system, sans-serif;
-    --font-mono: 'IBM Plex Mono', monospace;
-  }
-
-  * { box-sizing: border-box; }
-
-  html {
-    scroll-behavior: smooth;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; }
-  }
-
-  body {
-    margin: 0;
-    background: var(--paper);
-    color: var(--ink);
-    font-family: var(--font-body);
-    font-size: 16px;
-    line-height: 1.65;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  a {
-    color: var(--accent);
-    text-decoration-color: var(--rule);
-    text-underline-offset: 3px;
-  }
-  a:hover { text-decoration-color: var(--accent); }
-
-  :focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
-  }
-
-  .skip-link {
-    position: absolute;
-    left: -999px;
-    top: 0;
-  }
-  .skip-link:focus {
-    left: 1rem;
-    top: 1rem;
-    background: var(--paper);
-    padding: 0.5rem 1rem;
-    z-index: 10;
-  }
-
-  /* ---------- layout ---------- */
-  .page {
-    max-width: 1080px;
-    margin: 0 auto;
-    padding: 0 1.5rem;
-    display: grid;
-    grid-template-columns: 180px minmax(0, 1fr);
-    gap: 3rem;
-  }
-
-  .rail {
-    position: sticky;
-    top: 3.5rem;
-    align-self: start;
-    height: fit-content;
-    padding-top: 3.6rem;
-  }
-  .rail ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    border-left: 1px solid var(--rule);
-  }
-  .rail li { margin: 0; }
-  .rail a {
-    display: block;
-    padding: 0.35rem 0 0.35rem 0.9rem;
-    margin-left: -1px;
-    border-left: 2px solid transparent;
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--muted);
-    text-decoration: none;
-  }
-  .rail a:hover {
-    color: var(--ink);
-    border-left-color: var(--accent);
-  }
-
-  main {
-    max-width: 640px;
-    padding: 3rem 0 5rem;
-  }
-
-  /* ---------- masthead ---------- */
-  .masthead { margin-bottom: 3.5rem; }
-
-  .avatar {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    background: var(--accent);
-    color: var(--paper);
-    font-family: var(--font-display);
-    font-size: 1.4rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 1.25rem;
-    /*
-      Placeholder monogram. To use a real photo instead, replace this
-      div with: <img src="your-photo.jpg" alt="Photo of [Your Name]"
-      style="width:64px;height:64px;border-radius:50%;object-fit:cover;">
-    */
-  }
-
-  h1.name {
-    font-family: var(--font-display);
-    font-weight: 500;
-    font-size: 2.6rem;
-    line-height: 1.1;
-    margin: 0 0 0.4rem;
-  }
-
-  .role {
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin: 0 0 1.1rem;
-  }
-
-  .epigraph {
-    font-family: var(--font-display);
-    font-style: italic;
-    font-size: 1.15rem;
-    color: var(--ink);
-    margin: 0 0 1.4rem;
-    max-width: 32ch;
-  }
-
-  .links {
-    font-family: var(--font-mono);
-    font-size: 0.85rem;
-    color: var(--muted);
-  }
-  .links a { color: var(--ink); margin-right: 0.4rem; }
-  .links span.sep { margin-right: 0.4rem; color: var(--rule); }
-
-  /* ---------- sections ---------- */
-  section { margin-bottom: 3.2rem; scroll-margin-top: 2rem; }
-
-  h2.heading {
-    font-family: var(--font-display);
-    font-weight: 500;
-    font-size: 1.4rem;
-    margin: 0 0 1rem;
-    display: flex;
-    align-items: baseline;
-    gap: 0.55rem;
-  }
-  h2.heading .mark {
-    font-family: var(--font-mono);
-    font-size: 0.95rem;
-    color: var(--accent);
-  }
-
-  section p { margin: 0 0 1rem; }
-
-  /* research list */
-  .research-item {
-    border-top: 1px solid var(--rule);
-    padding: 1rem 0;
-  }
-  .research-item:last-child { border-bottom: 1px solid var(--rule); }
-  .research-item h3 {
-    font-family: var(--font-body);
-    font-weight: 600;
-    font-size: 1rem;
-    margin: 0 0 0.3rem;
-  }
-  .research-item p { margin: 0; color: var(--ink); font-size: 0.95rem; }
-
-  /* publications */
-  .pub-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  .pub-list li {
-    display: grid;
-    grid-template-columns: 52px 1fr;
-    gap: 1rem;
-    padding: 0.9rem 0;
-    border-top: 1px solid var(--rule);
-    font-size: 0.95rem;
-  }
-  .pub-list li:last-child { border-bottom: 1px solid var(--rule); }
-  .pub-year {
-    font-family: var(--font-mono);
-    font-size: 0.82rem;
-    color: var(--muted);
-    padding-top: 0.15rem;
-  }
-  .pub-cite em { font-style: italic; }
-  .pub-tags {
-    display: block;
-    margin-top: 0.3rem;
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-  }
-  .pub-tags a { margin-right: 0.7rem; }
-
-  /* teaching */
-  .teach-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  .teach-list li {
-    display: grid;
-    grid-template-columns: 130px 1fr;
-    gap: 1rem;
-    padding: 0.7rem 0;
-    border-top: 1px solid var(--rule);
-    font-size: 0.95rem;
-  }
-  .teach-list li:last-child { border-bottom: 1px solid var(--rule); }
-  .teach-term {
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    color: var(--muted);
-    padding-top: 0.2rem;
-  }
-
-  /* contact */
-  .contact-grid {
-    display: grid;
-    gap: 0.5rem;
-    font-size: 0.95rem;
-  }
-  .contact-grid .label {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--muted);
-    display: inline-block;
-    width: 90px;
-  }
-
-  footer.colophon {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    color: var(--muted);
-    border-top: 1px solid var(--rule);
-    padding-top: 1.2rem;
-  }
-
-  /* ---------- mobile ---------- */
-  @media (max-width: 860px) {
-    .page {
-      grid-template-columns: 1fr;
-      gap: 0;
-      padding: 0 1.25rem;
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Abel-John Buchner</title>
+  <meta name="description" content="Abel-John Buchner, Assistant Professor, Mechanical Engineering, Delft University of Technology">
+  <style>
+    :root {
+      --tud-cyan: #00A6D6;      /* TU Delft blue */
+      --pale: #E5F6FB;          /* pale tint of TU Delft blue */
+      --ink: #0C2340;           /* TU Delft dark blue, for text */
     }
-    .rail {
-      position: sticky;
-      top: 0;
-      padding-top: 0;
-      background: var(--paper);
-      border-bottom: 1px solid var(--rule);
-      z-index: 5;
-      margin: 0 -1.25rem;
-      padding-left: 1.25rem;
-      padding-right: 1.25rem;
-    }
-    .rail ul {
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      background: var(--pale);
+      color: var(--ink);
+      font-family: "Helvetica Neue", Arial, sans-serif;
       display: flex;
-      gap: 1.2rem;
-      overflow-x: auto;
-      border-left: none;
-      padding: 0.9rem 0;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
     }
-    .rail a {
-      padding: 0;
-      border-left: none;
-      border-bottom: 2px solid transparent;
-      white-space: nowrap;
+    main {
+      max-width: 560px;
+      width: 100%;
+      border-left: 4px solid var(--tud-cyan);
+      padding: 8px 0 8px 28px;
     }
-    .rail a:hover { border-bottom-color: var(--accent); }
-    main { padding: 2rem 0 4rem; max-width: 100%; }
-    h1.name { font-size: 2.1rem; }
-    .pub-list li, .teach-list li {
-      grid-template-columns: 1fr;
-      gap: 0.2rem;
+    h1 {
+      font-size: clamp(1.9rem, 5vw, 2.6rem);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin-bottom: 12px;
     }
-  }
-</style>
+    .title {
+      font-size: 1.05rem;
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+    ul { list-style: none; }
+    li { margin: 6px 0; font-size: 1rem; }
+    a {
+      color: var(--ink);
+      text-decoration: none;
+      border-bottom: 2px solid var(--tud-cyan);
+    }
+    a:hover, a:focus { color: var(--tud-cyan); }
+  </style>
 </head>
 <body>
-
-<a class="skip-link" href="#about">Skip to content</a>
-
-<div class="page">
-
-  <nav class="rail" aria-label="Section navigation">
-    <ul>
-      <li><a href="#about">About</a></li>
-      <li><a href="#research">Research</a></li>
-      <li><a href="#publications">Publications</a></li>
-      <li><a href="#teaching">Teaching</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-  </nav>
-
   <main>
-
-    <header class="masthead">
-      <div class="avatar" aria-hidden="true">YN</div>
-      <h1 class="name">[Your Name]</h1>
-      <p class="role">[Your Title] · Department of [Your Department] · [Your University]</p>
-      <p class="epigraph">"A one-line research statement or guiding question goes here."</p>
-      <p class="links">
-        <a href="mailto:you@university.edu">Email</a><span class="sep">·</span>
-        <a href="cv.pdf">CV (PDF)</a><span class="sep">·</span>
-        <a href="#">Google Scholar</a><span class="sep">·</span>
-        <a href="#">GitHub</a><span class="sep">·</span>
-        <a href="#">ORCID</a>
-      </p>
-    </header>
-
-    <section id="about">
-      <h2 class="heading"><span class="mark">§</span>About</h2>
-      <p>
-        I am a [Your Title] in the Department of [Your Department] at
-        [Your University], where I study [your broad research area].
-        My work focuses on [one or two specific questions or problems
-        you care about], drawing on methods from [relevant fields or
-        techniques]. Before this, I [previous degree/postdoc/role] at
-        [Previous Institution].
-      </p>
-      <p>
-        Outside of research, I [a personal detail — teaching philosophy,
-        outreach work, an interest — keep this short and genuine].
-      </p>
-    </section>
-
-    <section id="research">
-      <h2 class="heading"><span class="mark">§</span>Research</h2>
-
-      <div class="research-item">
-        <h3>[Research theme one]</h3>
-        <p>One or two sentences on what this theme is about and why it
-        matters — written for a reader outside your subfield.</p>
-      </div>
-      <div class="research-item">
-        <h3>[Research theme two]</h3>
-        <p>Same format. Keep each theme to a short, readable paragraph
-        rather than jargon-dense summary.</p>
-      </div>
-      <div class="research-item">
-        <h3>[Research theme three]</h3>
-        <p>A third theme, or delete this block if you only have two.</p>
-      </div>
-    </section>
-
-    <section id="publications">
-      <h2 class="heading"><span class="mark">§</span>Publications</h2>
-      <ul class="pub-list">
-        <li>
-          <span class="pub-year">2026</span>
-          <span class="pub-cite">
-            <strong>[Your Name]</strong>, Coauthor, B. (2026).
-            <em>Title of the paper goes here in sentence case.</em>
-            <em>Journal or Conference Name</em>.
-            <span class="pub-tags"><a href="#">PDF</a><a href="#">DOI</a><a href="#">Code</a></span>
-          </span>
-        </li>
-        <li>
-          <span class="pub-year">2025</span>
-          <span class="pub-cite">
-            Coauthor, A., <strong>[Your Name]</strong>, Coauthor, C. (2025).
-            <em>Another paper title, also in sentence case.</em>
-            <em>Proceedings of Some Venue</em>.
-            <span class="pub-tags"><a href="#">PDF</a><a href="#">Preprint</a></span>
-          </span>
-        </li>
-        <li>
-          <span class="pub-year">2024</span>
-          <span class="pub-cite">
-            <strong>[Your Name]</strong> (2024).
-            <em>A solo-authored piece or thesis chapter.</em>
-            <em>Venue or Repository</em>.
-            <span class="pub-tags"><a href="#">PDF</a></span>
-          </span>
-        </li>
-      </ul>
-    </section>
-
-    <section id="teaching">
-      <h2 class="heading"><span class="mark">§</span>Teaching</h2>
-      <ul class="teach-list">
-        <li>
-          <span class="teach-term">Spring 2026</span>
-          <span>[Course Code] — [Course Title], [Role: Instructor/TA]</span>
-        </li>
-        <li>
-          <span class="teach-term">Fall 2025</span>
-          <span>[Course Code] — [Course Title], [Role]</span>
-        </li>
-      </ul>
-    </section>
-
-    <section id="contact">
-      <h2 class="heading"><span class="mark">§</span>Contact</h2>
-      <div class="contact-grid">
-        <p><span class="label">Email</span> <a href="mailto:you@university.edu">you@university.edu</a></p>
-        <p><span class="label">Office</span> [Building, Room Number]</p>
-        <p><span class="label">Address</span> [Department, University, City]</p>
-      </div>
-    </section>
-
-    <footer class="colophon">
-      Set in Newsreader, Inter, and IBM Plex Mono. Built with HTML &amp; CSS.
-      Last updated [Month Year].
-    </footer>
-
+    <h1>Abel-John Buchner</h1>
+    <p class="title">
+      Assistant Professor, Mechanical Engineering<br>
+      Delft University of Technology
+    </p>
+    <ul>
+      <li><a href="mailto:a.j.buchner@tudelft.nl">a.j.buchner@tudelft.nl</a></li>
+      <!-- Replace this href with your profile URL, e.g. https://scholar.google.com/citations?user=YOUR_ID -->
+      <li><a href="https://scholar.google.com/citations?view_op=search_authors&amp;mauthors=Abel-John+Buchner">Google Scholar</a></li>
+    </ul>
   </main>
-  
-</div>
-
 </body>
 </html>
