@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Projects | Abel-John Buchner</title>
+  <meta name="description" content="Research projects of Abel-John Buchner and students, Delft University of Technology">
+  <style>
+    :root {
+      --tud-cyan: #00A6D6;      /* TU Delft blue */
+      --pale: #E5F6FB;          /* pale tint of TU Delft blue */
+      --header-bg: #D2EEF8;     /* header bar: a slightly deeper shade */
+      --ink: #0C2340;           /* TU Delft dark blue, for text */
+      --muted: #3D5A75;         /* softer text */
+      --rule: #BFE6F3;          /* light divider line */
+      --list-width: 250px;      /* width of the project list on the left */
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    body {
+      background: var(--pale);
+      color: var(--ink);
+      /* Candara where it's installed (Windows, and Macs with Microsoft Office);
+         otherwise the closest available font */
+      font-family: Candara, Optima, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.6;
+    }
+    a { color: var(--ink); }
+    sub { font-size: 0.75em; line-height: 0; }   /* the 2 in CO2 */
+
+    /* ---------- Header bar: logo on the left, menu on the right ---------- */
+    .site-header { background: var(--header-bg); position: relative; padding-bottom: 2px; }
+
+    /* ---------- Header line with a von Kármán vortex street ----------
+       Drawn in three pieces: a plain line from the left edge, the wake
+       graphic (wake.svg: a cylinder shedding vortices; the line fades back
+       in beyond them), and a plain line to the right edge. */
+    .wake-line {
+      --wake-height: 40px;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: calc(1px - var(--wake-height) / 2);   /* centres the line on the header's bottom edge */
+      height: var(--wake-height);
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .wake-line .line { flex: 1; height: 2px; background: var(--tud-cyan); }
+    .wake-line .lead {            /* where the cylinder sits: just right of the logo */
+      flex: none;
+      width: calc(max(24px, (100% - 960px) / 2 + 24px) + 170px);
+    }
+    .site-header .wake-line img { flex: none; display: block; height: var(--wake-height); width: auto; margin: 0 -1px; }
+    .site-header-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 12px 24px;         /* space above and below the logo */
+      display: flex;
+      flex-wrap: wrap;            /* on narrow screens the menu drops below the logo */
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px 32px;
+    }
+    .logo { display: inline-block; vertical-align: top; }
+    .site-header img {
+      display: block;
+      height: 40px;               /* change to make the logo bigger or smaller */
+      width: auto;
+    }
+
+    /* ---------- Menu (in the header bar) ---------- */
+    .site-nav ul {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 28px;
+    }
+    .site-nav li { font-size: 1rem; line-height: normal; }
+    .site-nav a {
+      font-weight: 600;
+      text-decoration: none;
+      border-bottom: 2px solid transparent;
+    }
+    .site-nav a:hover, .site-nav a:focus,
+    .site-nav a[aria-current="page"] {   /* highlights the page you're on */
+      color: var(--tud-cyan);
+      border-bottom-color: var(--tud-cyan);
+    }
+    @media (max-width: 480px) {   /* phones: smaller logo and tighter menu so they fit on one row */
+      .site-header-inner { column-gap: 16px; }
+      .site-header img { height: 30px; }
+      .site-nav ul { gap: 4px 14px; }
+      .site-nav li { font-size: 0.95rem; }
+      .wake-line { --wake-height: 22px; }   /* smaller vortex street, clear of the menu */
+      .wake-line .lead { width: 136px; }
+    }
+    @media (max-width: 374px) {   /* very narrow phones: the menu wraps under the logo, so leave room for the wake */
+      .site-header-inner { padding-bottom: 18px; }
+    }
+
+    /* ---------- Page header ---------- */
+    .page-header {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 32px 24px 32px;
+    }
+    .home-link {
+      font-size: 0.95rem;
+      text-decoration: none;
+      border-bottom: 2px solid var(--tud-cyan);
+    }
+    .home-link:hover, .home-link:focus { color: var(--tud-cyan); }
+    h1 {
+      font-size: clamp(1.6rem, 4vw, 2rem);   /* same size as your name on the homepage */
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin-top: 16px;
+    }
+    .page-intro {                 /* short blurb under the page title */
+      max-width: 680px;           /* keeps lines a comfortable length to read */
+      margin-top: 16px;
+      font-size: 1.05rem;
+    }
+    .page-intro p + p { margin-top: 1em; }
+
+    /* ---------- Layout: project list on the left, projects on the right ---------- */
+    .layout {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: var(--list-width) minmax(0, 1fr);
+      gap: 48px;
+      align-items: start;
+    }
+
+    /* ---------- Project list (stays in view while you scroll) ---------- */
+    .project-nav {
+      position: sticky;
+      top: 24px;
+      max-height: calc(100vh - 48px);
+      overflow-y: auto;           /* the list scrolls by itself if it's taller than the window */
+    }
+    .project-nav ol {
+      list-style: none;
+      border-left: 2px solid var(--rule);
+    }
+    .project-nav a {
+      display: block;
+      margin-left: -2px;          /* sits over the light line, so the blue marker replaces it */
+      padding: 7px 8px 7px 16px;
+      border-left: 2px solid transparent;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.35;
+      text-decoration: none;
+    }
+    .project-nav a:hover, .project-nav a:focus { color: var(--ink); }
+    .project-nav a.active {       /* the project you're currently reading */
+      color: var(--ink);
+      border-left-color: var(--tud-cyan);
+      background: rgba(0, 166, 214, 0.08);
+    }
+
+    /* ---------- Projects ---------- */
+    .projects section {
+      padding-bottom: 48px;
+      margin-bottom: 48px;
+      border-bottom: 1px solid var(--rule);
+      scroll-margin-top: 24px;    /* small gap above the title after clicking a project */
+    }
+    .projects section:last-child { border-bottom: none; margin-bottom: 0; }
+    h2 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      line-height: 1.3;
+      margin-bottom: 16px;
+    }
+    .media {                      /* photos and videos */
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 4px;
+      background: #fff;
+      margin-bottom: 16px;
+    }
+
+    /* ---------- Narrow screens: list above the projects ---------- */
+    @media (max-width: 860px) {
+      .layout { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+      .project-nav { position: static; max-height: none; overflow: visible; }
+    }
+
+    /* ---------- Footer ---------- */
+    footer {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 32px 24px 48px;
+      font-size: 0.95rem;
+    }
+    footer a {
+      text-decoration: none;
+      border-bottom: 2px solid var(--tud-cyan);
+    }
+    footer a:hover, footer a:focus { color: var(--tud-cyan); }
+  </style>
+</head>
+<body>
+
+  <!--
+    HEADER BAR: logo on the left, menu on the right.
+    This page is inside the projects folder, so links to the logo and to other
+    pages start with ../ (meaning "go up one folder").
+    aria-current="page" marks Projects as the page you're on.
+  -->
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="logo" href="https://www.tudelft.nl/me/over/afdelingen/process-energy/research/research-sections/fluid-mechanics"><img src="../international-logo_rgb.svg" alt="TU Delft Fluid Mechanics section"></a>
+      <nav class="site-nav">
+        <ul>
+          <li><a href="index.html" aria-current="page">Projects</a></li>
+          <li><a href="../education/index.html">Education</a></li>
+          <li><a href="../team/index.html">Team</a></li>
+        </ul>
+      </nav>
+    </div>
+    <!-- Header line with a vortex street behind a cylinder (decorative) -->
+    <div class="wake-line" aria-hidden="true"><span class="line lead"></span><img src="../wake.svg" alt=""><span class="line"></span></div>
+  </header>
+
+  <header class="page-header">
+    <a class="home-link" href="../index.html">&larr; Abel-John Buchner</a>
+    <h1>Projects</h1>
+	
+	<!-- BLURB: replace the text below with your own. For a second paragraph,
+	 add another <p> ... </p>. To have no blurb, delete the whole
+	 <div class="page-intro"> ... </div> block. -->
+    <div class="page-intro">
+      <p>
+        Below are brief descriptions of some of our current or recent research topics.
+      </p>
+    </div>
+
+  </header>
+
+  <!--
+    HOW THIS PAGE WORKS
+    The list on the left links to the projects on the right. Each link's
+    href="#..." must match the id="..." of a project <section> below.
+
+    To add a project: copy one <li> line in the list AND one <section> block,
+    and give both the same new id (lowercase, no spaces, e.g. "vortex-rings").
+    To remove one, delete both. To reorder, move both.
+
+    Photos and videos for this page go in this projects folder. To add or
+    swap one, copy an <img ...> line (for a photo) or a <video ...> line
+    (for a video) from another project and change:
+      src="..."            the file name
+      width / height       the file's size in pixels (reserves its space
+                           while it loads; it's always shown column-wide)
+      alt / aria-label     a short description, for screen readers
+    Projects without a figure have a hidden (commented-out) photo line you
+    can use instead: remove the comment markers at its start and end.
+  -->
+  <div class="layout">
+
+    <nav class="project-nav" aria-label="Projects">
+      <ol>
+        <li><a href="#robotics">Industrial robotics for fluid dynamics experimentation</a></li>
+        <li><a href="#mosquitoes">Aerodynamics of mosquito reproduction</a></li>
+        <li><a href="#wing-wake">Wing-wake interaction during reversal motions</a></li>
+        <li><a href="#cylinder-wakes">Active control in tandem cylinder wakes</a></li>
+        <li><a href="#shock-buffet">Nonlinear modelling of shock buffet</a></li>
+        <li><a href="#leading-edge-stall">Bio-inspired leading edge stall control under wave forcing</a></li>
+        <li><a href="#vertical-axis-turbines">Vertical axis wind turbines in unsteady conditions</a></li>
+        <li><a href="#wake-mixing">Active wake mixing control in wind farms</a></li>
+        <li><a href="#force-reconstruction">Reconstructing forces from flow fields</a></li>
+        <li><a href="#co2-emissions">CO<sub>2</sub> emission rate estimation from satellite data</a></li>
+      </ol>
+    </nav>
+
+    <main class="projects">
+
+      <!-- Remove "autoplay" if you'd rather the video only plays when clicked.
+           width and height are the video's own size in pixels; they reserve
+           its space while it loads, so the page doesn't jump. -->
+
+      <section id="robotics">
+        <h2>Industrial robotics for fluid dynamics experimentation</h2>
+        <img class="media" src="robotics.jpg" width="1300" height="1359" alt="Two industrial robot arms on either side of a glass water tank in the lab">
+        <p>
+          Experiments on unsteady fluid dynamics are in most cases based on bespoke actuation setups. These often provide limited degrees of freedom, and require considerable effort to validate for complex motions. We use commercial robotic equipment with guaranteed, tested, and quantified precision and repeatability, and user-friendly control software.  
+        </p>
+      </section>
+	  
+	  <section id="mosquitoes">
+        <h2>Aerodynamics of mosquito reproduction</h2>
+        <video class="media" src="mosquitoes.mp4" width="592" height="192" autoplay muted loop playsinline controls aria-label="A pair of mosquitoes mating in flight, filmed from three cameras with tracked body and leg points"></video>
+        <p>
+          Some mosquito species copulate while flying. It is known that during mate selection and mating the partners modulate their wing beat frequency. What role this plays from an aerodynamic standpoint, and its effect on the energetics of the mating pair remains unknown. We have been tracking free-flight copulatory kinematics and analysing the flow interactions between partners.
+        </p>
+      </section>
+
+      <section id="wing-wake">
+        <h2>Wing-wake interaction during reversal motions</h2>
+        <video class="media" src="wing-wake.mp4" width="1228" height="946" autoplay muted loop playsinline controls aria-label="Vorticity around a flat plate as it reverses its motion"></video>
+        <p>
+          Predictive models of unsteady aerodynamics largely ignore time-history effects, while these are known to be important for oscillatory systems such as in flapping flight, where energy imparted to the flow in one wing stroke can be recovered in the following stroke in a process known as "wake capture". No general model for wake capture exists, and its scaling with kinematic parameters is uncertain, prompting us to investigate the behaviour of wing-wake interaction in simplified kinematic settings.
+        </p>
+      </section>
+
+      <section id="cylinder-wakes">
+        <h2>Active control in tandem cylinder wakes</h2>
+        <img class="media" src="cylinder-wakes.png" width="1189" height="1270" alt="Wake flow fields and force histories for tandem cylinders, before and after control is switched on">
+        <p>
+		  Flow around tandem cylinders exhibits complex wake interactions that lead to amplified unsteady loads. Active suppression of vortex shedding in such systems has so far only been achieved using open-loop approaches, which require continual energy input. We developed a closed-loop control framework, based on a weakly nonlinear analysis, for suppressing vortex shedding in tandem-cylinder flows where control effort also reduces to zero for long times. 
+        </p>
+      </section>
+
+      <section id="shock-buffet">
+        <h2>Nonlinear modelling of shock buffet</h2>
+        <video class="media" src="shockbuffet.mp4" width="1372" height="1080" autoplay muted loop playsinline controls aria-label="Shock buffet on an aerofoil: simulation (URANS) compared with the reduced-order model, and the invariant manifold"></video>
+        <p>
+          In transonic flow, shock-boundary-layer interactions can give rise to transonic buffet, degrading maneuverability through unsteady aerodynamic loads. Two-dimensional buffet represents a canonical example of a global instability for which reduced-order modeling remains challenging due to nonlinearity, sharp spatial gradients, and the coexistence of an unstable equilibrium with an attracting limit cycle. Commonly, reduced-order models of such phenomena capture nonlinear dynamics only in aerodynamic observables, such as lift and drag forces, while prediction of the full flow state is achieved through linear representations valid only near the unstable equilibrium or on the limit cycle.
+		  We therefore have been exploring modeling the nonlinear evolution of the full flow field by extending established data-driven spectral-submanifold approaches via a novel hybrid manifold parameterization combining polynomial and radial-basis-function representations. Our approach retains modal interpretability near the equilibrium while improving the accuracy and robustness of the manifold approximation.
+        </p>
+      </section>
+
+      <section id="leading-edge-stall">
+        <h2>Bio-inspired leading edge stall control under wave forcing</h2>
+        <img class="media" src="leading-edge-stall.png" width="1022" height="484" alt="Experimental setup with a hydrofoil towed through waves, and velocity fields around the foil without and with tubercles">
+        <p>
+          Waves impose periodic fluctuations in velocity magnitude and orientation, causing a steadily translating hydrofoil to undergo dynamic stall at large wave forcing amplitudes. We characterised this hydrofoil–wave interaction and, in an attempt at passive flow control, applied a bio-inspired tubercle geometry along the hydrofoil leading edge. This geometry is known to delay stall in steady cases, but has scarcely been studied in unsteady flow conditions. 
+		  The tubercles were found to qualitatively modify the flow behaviour during dynamic stall, thereby attenuating drag force fluctuations, with potential consequences for fatigue characteristics of offshore equipment.
+        </p>
+      </section>
+
+      <section id="vertical-axis-turbines">
+        <h2>Vertical axis wind turbines in unsteady conditions</h2>
+		<video class="media" src="vertical-axis-turbines.mp4" width="1280" height="720" autoplay muted loop playsinline controls aria-label="A vertical axis wind turbine spinning in the test section of a fan-array wind tunnel"></video>
+        <p>
+          Vertical axis (or cross-flow) wind turbines have been proposed as a solution for small-scale urban energy-harvesting applications. In these applications, a turbine will encounter highly unsteady gusting flows. It has recently been observed that horizontal wind turbines' efficiency can actually benefit from such unsteadiness. We have been investigating this effect for vertical axis turbines using a programmable fan-array wind tunnel.
+        </p>
+      </section>
+
+      <section id="wake-mixing">
+        <h2>Active wake mixing control in wind farms</h2>
+        <img class="media" src="wake-mixing.png" width="852" height="593" alt="Phase-averaged wake velocity behind two wind turbines in a row, at four phases of the pulsing control">
+        <p>
+          In wind farms, some turbines inevitably operate in the wake of others, where less energy is available for extraction. Using data-driven methods on a low-order representation of a minimal wind farm, we have been investigating how individual turbines should behave to most optimally modify their wake for the benefit of turbines downstream and, with the right trade-offs, the farm as a whole.
+        </p>
+      </section>
+
+      <section id="force-reconstruction">
+        <h2>Reconstructing forces from flow fields</h2>
+        <img class="media" src="force-reconstruction.png" width="1400" height="932" alt="Vorticity, pressure and residual fields around a moving plate, and the force estimated from the flow compared with a force sensor">
+        <p>
+          It is possible, via several formulations, to reconstruct the fluid-dynamic force on a solid body from information on the flow around it. We have been investigating how these methods perform in accelerating systems, especially where only two-dimensional information is known about an inherently three-dimensional flow. We provide a criterion, based on flowfield divergence, which indicates the validity of the force reconstruction from such two-dimensional measurements in unsteady flows.
+        </p>
+      </section>
+
+      <section id="co2-emissions">
+        <h2>CO<sub>2</sub> emission rate estimation from satellite data</h2>
+        <img class="media" src="co2-emissions.jpg" width="912" height="492" alt="Illustration of the TANGO satellites observing emissions over the Earth">
+        <p>
+          To measure the rate of CO<sub>2</sub> emission from point sources such as powerplants, it is possible to use satellite-derived instantaneous snapshot measurements of gas concentrations in conjunction with windspeed data predicted from meteorological observations. This approach leads however to large uncertainties in emission rate predictions. We explored the possibility of using unique dual-snapshot data from the upcoming Twin Anthropogenic Greenhouse Gas Observers (TANGO) mission to directly measure plume velocity, and so reduce uncertainty on emission rate estimations. (Image: SRON)
+        </p>
+      </section>
+
+    </main>
+  </div>
+
+  <footer>
+    <a href="../index.html">Home</a> &nbsp;&middot;&nbsp;
+    <a href="mailto:a.j.buchner@tudelft.nl">a.j.buchner@tudelft.nl</a>
+  </footer>
+
+  <!-- Highlights the project you're reading in the list on the left. -->
+  <script>
+    const nav = document.querySelector('.project-nav');
+    const links = [...nav.querySelectorAll('a')];
+    const sections = [...document.querySelectorAll('.projects section')];
+    let followClick = false;   // after clicking a project, keep it highlighted until you scroll yourself
+
+    function setActive(id) {
+      links.forEach(link => {
+        const on = link.getAttribute('href') === '#' + id;
+        link.classList.toggle('active', on);
+        // if the list itself scrolls (short windows), keep the highlighted project in view
+        if (on && nav.scrollHeight > nav.clientHeight) {
+          const top = link.offsetTop, bottom = top + link.offsetHeight;
+          if (top < nav.scrollTop || bottom > nav.scrollTop + nav.clientHeight) {
+            nav.scrollTop = top - nav.clientHeight / 3;
+          }
+        }
+      });
+    }
+
+    function update() {
+      if (followClick) return;
+      const atBottom = innerHeight + scrollY >= document.documentElement.scrollHeight - 4;
+      let current = sections[0];
+      sections.forEach(s => { if (s.getBoundingClientRect().top <= innerHeight * 0.3) current = s; });
+      if (atBottom) current = sections[sections.length - 1];
+      setActive(current.id);
+    }
+
+    links.forEach(link => link.addEventListener('click', () => {
+      setActive(link.getAttribute('href').slice(1));
+      followClick = true;
+    }));
+    ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(type =>
+      addEventListener(type, () => { followClick = false; }, { passive: true }));
+    addEventListener('scroll', () => requestAnimationFrame(update), { passive: true });
+    addEventListener('resize', update);
+    if (location.hash) {
+      setActive(location.hash.slice(1));
+      followClick = true;
+    } else {
+      update();
+    }
+  </script>
+
+</body>
+</html>
