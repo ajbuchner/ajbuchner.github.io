@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Abel-John Buchner</title>
+  <meta name="description" content="Abel-John Buchner, Assistant Professor, Mechanical Engineering, Delft University of Technology">
+  <style>
+    :root {
+      --tud-cyan: #00A6D6;      /* TU Delft blue */
+      --pale: #E5F6FB;          /* pale tint of TU Delft blue */
+      --header-bg: #D2EEF8;     /* header bar: a slightly deeper shade */
+      --ink: #0C2340;           /* TU Delft dark blue, for text */
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { height: 100%; }
+    body {
+      min-height: 100%;
+      background: var(--pale);
+      color: var(--ink);
+      /* Candara where it's installed (Windows, and Macs with Microsoft Office);
+         otherwise the closest available font */
+      font-family: Candara, Optima, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      display: flex;
+      flex-direction: column;     /* logo header on top, name block below */
+      gap: 24px;
+      padding-bottom: 24px;
+    }
+    main {
+      max-width: 800px;
+      width: calc(100% - 48px);   /* leaves a 24px margin on each side on phones */
+      /* Vertically centred below the header; left edge lined up with the logo.
+         For the far left of the screen instead, use: margin: auto 0 auto 24px; */
+      margin: auto 0 auto max(24px, calc((100% - 960px) / 2 + 24px));
+    }
+    .intro {
+      display: flex;              /* photo on the left, name and contact on the right */
+      align-items: center;
+      gap: 40px;
+    }
+
+    /* ---------- Blurb (below the photo and contact details) ---------- */
+    .blurb {
+      max-width: 680px;           /* keeps lines a comfortable length to read */
+      margin-top: 40px;
+      font-size: 1.05rem;
+      line-height: 1.6;
+    }
+    .blurb p + p { margin-top: 1em; }
+
+    /* ---------- Photo ---------- */
+    .portrait {
+      flex: none;
+      width: 200px;               /* size of the circle: keep both numbers the same */
+      height: 200px;
+      object-fit: cover;          /* crops the photo to fill the circle without stretching */
+      object-position: center top;
+      border-radius: 50%;         /* makes it a circle */
+      background: #fff;
+    }
+    @media (max-width: 600px) {   /* phones: photo above the text */
+      .intro { flex-direction: column; align-items: flex-start; gap: 24px; }
+      .blurb { margin-top: 28px; }
+      .portrait { width: 140px; height: 140px; }
+    }
+
+    /* ---------- Header bar: logo on the left, menu on the right ---------- */
+    .site-header { background: var(--header-bg); position: relative; padding-bottom: 2px; }
+
+    /* ---------- Header line with a von Kármán vortex street ----------
+       Drawn in three pieces: a plain line from the left edge, the wake
+       graphic (wake.svg: a cylinder shedding vortices; the line fades back
+       in beyond them), and a plain line to the right edge. */
+    .wake-line {
+      --wake-height: 40px;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: calc(1px - var(--wake-height) / 2);   /* centres the line on the header's bottom edge */
+      height: var(--wake-height);
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .wake-line .line { flex: 1; height: 2px; background: var(--tud-cyan); }
+    .wake-line .lead {            /* where the cylinder sits: just right of the logo */
+      flex: none;
+      width: calc(max(24px, (100% - 960px) / 2 + 24px) + 170px);
+    }
+    .site-header .wake-line img { flex: none; display: block; height: var(--wake-height); width: auto; margin: 0 -1px; }
+    .site-header-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 12px 24px;         /* space above and below the logo */
+      display: flex;
+      flex-wrap: wrap;            /* on narrow screens the menu drops below the logo */
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px 32px;
+    }
+    .logo { display: inline-block; vertical-align: top; border-bottom: none; }
+    .site-header img {
+      display: block;
+      height: 40px;               /* change to make the logo bigger or smaller */
+      width: auto;
+    }
+    h1 {
+      font-size: clamp(1.6rem, 4vw, 2rem);   /* your name */
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin-bottom: 12px;
+    }
+    .title {
+      font-size: 1.05rem;
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+    ul { list-style: none; }
+    li { margin: 6px 0; font-size: 1rem; }
+    a {
+      color: var(--ink);
+      text-decoration: none;
+      border-bottom: 2px solid var(--tud-cyan);
+    }
+    a:hover, a:focus { color: var(--tud-cyan); }
+
+    /* ---------- Menu (in the header bar) ---------- */
+    .site-nav ul {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 28px;
+    }
+    .site-nav li { margin: 0; font-size: 1rem; }
+    .site-nav a {
+      font-weight: 600;
+      text-decoration: none;
+      border-bottom: 2px solid transparent;
+    }
+    .site-nav a:hover, .site-nav a:focus,
+    .site-nav a[aria-current="page"] {   /* highlights the page you're on */
+      color: var(--tud-cyan);
+      border-bottom-color: var(--tud-cyan);
+    }
+    @media (max-width: 480px) {   /* phones: smaller logo and tighter menu so they fit on one row */
+      .site-header-inner { column-gap: 16px; }
+      .site-header img { height: 30px; }
+      .site-nav ul { gap: 4px 14px; }
+      .site-nav li { font-size: 0.95rem; }
+      .wake-line { --wake-height: 22px; }   /* smaller vortex street, clear of the menu */
+      .wake-line .lead { width: 136px; }
+    }
+    @media (max-width: 374px) {   /* very narrow phones: the menu wraps under the logo, so leave room for the wake */
+      .site-header-inner { padding-bottom: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <!--
+    HEADER BAR: logo on the left, menu on the right.
+    Every page has its own copy of this menu, so when you add or rename a page,
+    update the menu on each page. To remove an item, delete its line; to add
+    one, copy a line.
+  -->
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="logo" href="https://www.tudelft.nl/me/over/afdelingen/process-energy/research/research-sections/fluid-mechanics"><img src="international-logo_rgb.svg" alt="TU Delft Fluid Mechanics section"></a>
+      <nav class="site-nav">
+        <ul>
+          <li><a href="projects/index.html">Projects</a></li>
+          <li><a href="education/index.html">Education</a></li>
+          <li><a href="team/index.html">Team</a></li>
+        </ul>
+      </nav>
+    </div>
+    <!-- Header line with a vortex street behind a cylinder (decorative) -->
+    <div class="wake-line" aria-hidden="true"><span class="line lead"></span><img src="wake.svg" alt=""><span class="line"></span></div>
+  </header>
+
+  <main>
+    <div class="intro">
+      <!-- PHOTO: put your photo in the same folder as this page and set its name in src="..." -->
+      <img class="portrait" src="portrait.png" alt="Abel-John Buchner">
+
+      <div>
+        <h1>Abel-John Buchner</h1>
+        <p class="title">
+          Assistant Professor, Fluid Mechanics<br>
+          Delft University of Technology<br>
+		  <a href="mailto:a.j.buchner@tudelft.nl">a.j.buchner@tudelft.nl</a>
+        </p>
+
+        <ul>
+          <li><a href="https://scholar.google.nl/citations?view_op=list_works&hl=en&hl=en&user=SpUDYeEAAAAJ">Google Scholar</a></li>
+          <li><a href="https://www.tudelft.nl/me/over/afdelingen/process-energy/research/research-sections/fluid-mechanics">Section Homepage</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- BLURB: replace the text below with your own. For a second paragraph,
+         add another <p> ... </p> inside the blurb. -->
+    <div class="blurb">
+      <p>
+        Fluid dynamics is the most beautiful science.<br>
+		Governed by one simple set of partial differential equations, flows manifest myriad phenomena.<br>
+		These phenomena are at once tangible and enigmatic.<br>
+		Unravelling the enigmas is what drives our research.
+      </p>
+    </div>
+  </main>
+</body>
+</html>
