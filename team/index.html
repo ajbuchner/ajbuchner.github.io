@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Team | Abel-John Buchner</title>
+  <meta name="description" content="Current and past postdocs, PhD candidates and MSc students of Abel-John Buchner, Delft University of Technology">
+  <style>
+    :root {
+      --tud-cyan: #00A6D6;      /* TU Delft blue */
+      --pale: #E5F6FB;          /* pale tint of TU Delft blue */
+      --header-bg: #D2EEF8;     /* header bar: a slightly deeper shade */
+      --ink: #0C2340;           /* TU Delft dark blue, for text */
+      --muted: #3D5A75;         /* softer text, for years and second lines */
+      --rule: #BFE6F3;          /* light divider line */
+      --left-col: 230px;        /* left column (names and years); widen if a name wraps */
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--pale);
+      color: var(--ink);
+      /* Candara where it's installed (Windows, and Macs with Microsoft Office);
+         otherwise the closest available font */
+      font-family: Candara, Optima, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.6;
+    }
+    a { color: var(--ink); }
+
+    /* ---------- Header bar: logo on the left, menu on the right ---------- */
+    .site-header { background: var(--header-bg); position: relative; padding-bottom: 2px; }
+
+    /* ---------- Header line with a von Kármán vortex street ----------
+       Drawn in three pieces: a plain line from the left edge, the wake
+       graphic (wake.svg: a cylinder shedding vortices; the line fades back
+       in beyond them), and a plain line to the right edge. */
+    .wake-line {
+      --wake-height: 40px;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: calc(1px - var(--wake-height) / 2);   /* centres the line on the header's bottom edge */
+      height: var(--wake-height);
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .wake-line .line { flex: 1; height: 2px; background: var(--tud-cyan); }
+    .wake-line .lead {            /* where the cylinder sits: just right of the logo */
+      flex: none;
+      width: calc(max(24px, (100% - 960px) / 2 + 24px) + 170px);
+    }
+    .site-header .wake-line img { flex: none; display: block; height: var(--wake-height); width: auto; margin: 0 -1px; }
+    .site-header-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 12px 24px;         /* space above and below the logo */
+      display: flex;
+      flex-wrap: wrap;            /* on narrow screens the menu drops below the logo */
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px 32px;
+    }
+    .logo { display: inline-block; vertical-align: top; }
+    .site-header img {
+      display: block;
+      height: 40px;               /* change to make the logo bigger or smaller */
+      width: auto;
+    }
+
+    /* ---------- Menu (in the header bar) ---------- */
+    .site-nav ul {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 28px;
+    }
+    .site-nav li { font-size: 1rem; line-height: normal; }
+    .site-nav a {
+      font-weight: 600;
+      text-decoration: none;
+      border-bottom: 2px solid transparent;
+    }
+    .site-nav a:hover, .site-nav a:focus,
+    .site-nav a[aria-current="page"] {   /* highlights the page you're on */
+      color: var(--tud-cyan);
+      border-bottom-color: var(--tud-cyan);
+    }
+    @media (max-width: 480px) {   /* phones: smaller logo and tighter menu so they fit on one row */
+      .site-header-inner { column-gap: 16px; }
+      .site-header img { height: 30px; }
+      .site-nav ul { gap: 4px 14px; }
+      .site-nav li { font-size: 0.95rem; }
+      .wake-line { --wake-height: 22px; }   /* smaller vortex street, clear of the menu */
+      .wake-line .lead { width: 136px; }
+    }
+    @media (max-width: 374px) {   /* very narrow phones: the menu wraps under the logo, so leave room for the wake */
+      .site-header-inner { padding-bottom: 18px; }
+    }
+
+    /* ---------- Page header ---------- */
+    .page-header {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 32px 24px 0;
+    }
+    .home-link {
+      font-size: 0.95rem;
+      text-decoration: none;
+      border-bottom: 2px solid var(--tud-cyan);
+    }
+    .home-link:hover, .home-link:focus { color: var(--tud-cyan); }
+    h1 {
+      font-size: clamp(1.6rem, 4vw, 2rem);   /* same size as your name on the homepage */
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin-top: 16px;
+    }
+    .page-intro {                 /* short blurb under the page title */
+      max-width: 680px;           /* keeps lines a comfortable length to read */
+      margin-top: 16px;
+      font-size: 1.05rem;
+    }
+    .page-intro p + p { margin-top: 1em; }
+
+    /* ---------- Sections ---------- */
+    section {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 40px 24px;
+      border-bottom: 1px solid var(--rule);
+    }
+    section:last-of-type { border-bottom: none; }
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    h3 {                        /* Postdocs / PhD / MSc headings */
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin: 28px 0 12px;
+    }
+
+    /* ---------- Current members: names in a grid ---------- */
+    .people {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px 32px;
+    }
+
+    /* ---------- Past members: year on the left, details on the right ---------- */
+    .entries { list-style: none; }
+    .entry {
+      display: grid;
+      grid-template-columns: var(--left-col) minmax(0, 1fr);
+      gap: 2px 24px;
+      padding: 14px 0;
+      border-top: 1px solid var(--rule);
+    }
+    .entry:first-child { border-top: none; padding-top: 0; }
+    .when { color: var(--muted); font-variant-numeric: lining-nums tabular-nums; }
+    .what { font-weight: 600; }
+    .detail { color: var(--muted); }
+    .thesis { font-style: italic; }
+    @media (max-width: 600px) {   /* phones: year above the details */
+      .entry { grid-template-columns: 1fr; }
+    }
+
+    /* ---------- Footer ---------- */
+    footer {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 32px 24px 48px;
+      font-size: 0.95rem;
+    }
+    footer a {
+      text-decoration: none;
+      border-bottom: 2px solid var(--tud-cyan);
+    }
+    footer a:hover, footer a:focus { color: var(--tud-cyan); }
+  </style>
+</head>
+<body>
+
+  <!--
+    HEADER BAR: logo on the left, menu on the right.
+    This page is inside the team folder, so links to the logo and to other
+    pages start with ../ (meaning "go up one folder").
+    aria-current="page" marks Team as the page you're on.
+  -->
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="logo" href="https://www.tudelft.nl/me/over/afdelingen/process-energy/research/research-sections/fluid-mechanics"><img src="../international-logo_rgb.svg" alt="TU Delft Fluid Mechanics section"></a>
+      <nav class="site-nav">
+        <ul>
+          <li><a href="../projects/index.html">Projects</a></li>
+          <li><a href="../education/index.html">Education</a></li>
+          <li><a href="index.html" aria-current="page">Team</a></li>
+        </ul>
+      </nav>
+    </div>
+    <!-- Header line with a vortex street behind a cylinder (decorative) -->
+    <div class="wake-line" aria-hidden="true"><span class="line lead"></span><img src="../wake.svg" alt=""><span class="line"></span></div>
+  </header>
+
+  <header class="page-header">
+    <a class="home-link" href="../index.html">&larr; Abel-John Buchner</a>
+    <h1>Team</h1>
+
+    <!-- BLURB: replace the text below with your own. For a second paragraph,
+         add another <p> ... </p>. To have no blurb, delete the whole
+         <div class="page-intro"> ... </div> block. -->
+    <div class="page-intro">
+      <p>
+        For those interested in joining our team, all open positions are advertised via the <a href="https://careers.tudelft.nl/go/All-jobs/9021002/">TU Delft jobs page</a>. If you have a research idea and want to apply for independent funding to work with us, for example through a <a href="https://marie-sklodowska-curie-actions.ec.europa.eu/">MSCA grant</a>, contact me via <a href="mailto:a.j.buchner@tudelft.nl">email</a>.
+      </p>
+    </div>
+  </header>
+
+  <main>
+
+    <!--
+      HOW THE LISTS WORK
+      Current members: each person is one <li class="entry"> ... </li> block
+      with their name on the left, then their project and co-supervisor(s).
+      Past members: each person is one <li class="entry"> ... </li> block with
+      the year on the left, their name, and their thesis title.
+      If a name wraps onto two lines, widen --left-col at the top of the styles.
+      To add someone, copy a whole block; to remove someone, delete it.
+      When a student graduates, delete them from "Current" and add them under
+      "Past" with their graduation year and thesis title.
+      If a group is empty (e.g. no past postdocs yet), delete its <h3> heading
+      and the list below it.
+    -->
+
+    <!-- ===== Current members ===== -->
+    <section id="current">
+      <h2>Current members</h2>
+
+<!--
+      <h3>Postdocs</h3>
+      <ul class="people">
+        <li>
+          <p class="what">Name</p>
+          <p class="detail">Project topic</p>
+        </li>
+      </ul>
+-->
+
+      <h3>PhD candidates</h3>
+      <ul class="entries">
+        <li class="entry">
+          <span class="what">Alexandra Ministeru</span>
+          <div>
+            <p class="what">Data-driven control of wind turbine wake mixing</p>
+			<p class="detail">with Jan-Willem van Wingerden</p>
+          </div>
+        </li>
+        <li class="entry">
+          <span class="what">Dirk de Boer</span>
+          <div>
+            <p class="what">Wing-wake interaction in bio-inspired propulsion</p>
+			<p class="detail">with Jerry Westerweel</p>
+          </div>
+        </li>
+        <li class="entry">
+          <span class="what">Ilam Bharathi</span>
+          <div>
+            <p class="what">Aerodynamics and scaling of Dipteran flight</p>
+			<p class="detail">with Florian Muijres and Guillermo Amador</p>
+          </div>
+        </li>
+        <li class="entry">
+          <span class="what">Tea Vojković</span>
+          <div>
+            <p class="what">Parametric nonlinear reduced order modelling and control of bifurcation fluid systems</p>
+			<p class="detail">with Dimitris Boskos</p>
+          </div>
+        </li>
+        <li class="entry">
+          <span class="what">Nicola Savelli</span>
+          <div>
+            <p class="what">Force reconstruction in accelerating flows</p>
+			<p class="detail">with Jerry Westerweel</p>
+          </div>
+        </li>
+        <li class="entry">
+          <span class="what">Parviz Ghoddoosi Dehnavi</span>
+          <div>
+            <p class="what">Dynamics of microbial flagella</p>
+			<p class="detail">with Daniel Tam</p>
+          </div>
+        </li>
+      </ul>
+<!--
+      <ul class="people">
+        <li>
+          <p class="what">Alexandra Ministeru</p>
+          <p class="detail">with Jan-Willem van Wingerden</p>
+          <p class="detail">Data-driven control of wind turbine wake mixing</p>
+        </li>
+        <li>
+          <p class="what">Dirk de Boer</p>
+          <p class="detail">with Jerry Westerweel</p>
+          <p class="detail">Wing-wake interaction in bio-inspired propulsion</p>
+        </li>
+        <li>
+          <p class="what">Ilam Bharathi</p>
+          <p class="detail">with Florian Muijres and Guillermo Anador</p>
+          <p class="detail">Aerodynamics and scaling of Dipteran flight</p>
+        </li>
+        <li>
+          <p class="what">Tea Vojković</p>
+		  <p class="detail">with Dimitris Boskos</p>
+          <p class="detail">Parametric nonlinear reduced order modelling and control of bifurcation fluid systems</p>
+        </li>
+		<li>
+          <p class="what">Nicola Savelli</p>
+          <p class="detail">with Jerry Westerweel</p>
+          <p class="detail">Force reconstruction in accelerating flows</p>
+        </li>
+        <li>
+          <p class="what">Parviz Ghoddoosi Dehnavi</p>
+          <p class="detail">with Daniel Tam</p>
+          <p class="detail">Dynamics of microbial flagella</p>
+        </li>
+	  </ul>
+-->
+
+<!--      <h3>MSc students</h3>
+      <ul class="people">
+        <li>
+          <p class="what">Name</p>
+          <p class="detail">Project topic</p>
+        </li>
+        <li>
+          <p class="what">Name</p>
+          <p class="detail">Project topic</p>
+        </li>
+        <li>
+          <p class="what">Name</p>
+          <p class="detail">Project topic</p>
+        </li>
+        <li>
+          <p class="what">Name</p>
+          <p class="detail">Project topic</p>
+        </li>
+      </ul>
+	  
+-->
+    </section>
+
+    <!-- ===== Past members ===== -->
+    <section id="past">
+      <h2>Past members</h2>
+
+      <!-- Postdocs don't have a thesis, so this shows the years they were in
+           the group and, optionally, where they went next. -->
+      <h3>Postdocs</h3>
+      <ul class="entries">
+        <li class="entry">
+          <span class="when">2024–2025</span>
+          <div>
+            <p class="what">Guillaume Ricard</p>
+			<p class="detail">Dynamic stall in the presence of gravity waves: effect of bio-inspired leading-edge geometries</p>
+            <p class="detail">Next position: Assistant Professor, Laboratoire de Physique, ENS de Lyon</p>
+          </div>
+        </li>
+      </ul>
+
+      <h3>PhD graduates</h3>
+      <ul class="entries">
+        <li class="entry">
+          <span class="when">2025</span>
+          <div>
+            <p class="what">Junaid Mehmood</p>
+            <p class="detail thesis">3D Tracking of Motile Microorganisms: An Experimental Investigation of the Kinematics and Interactions of C. Reinhardtii</p>
+            <p class="detail">Next position: Data scientist, Danone</p>
+          </div>
+        </li>
+      </ul>
+
+      <!-- To link a thesis title to the TU Delft repository, wrap it in a link:
+           <p class="detail thesis"><a href="https://...">Thesis title</a></p> -->
+      <h3>MSc graduates</h3>
+      <ul class="entries">
+        <li class="entry">
+          <span class="when">2026</span>
+          <div>
+            <p class="what">Ilias Fransen</p>
+            <p class="detail thesis">Stratified Turbulent Flow Past a Monopile: Designing an experimental setup</p>
+          </div>
+        </li>
+        <li class="entry">
+          <span class="when">2025</span>
+          <div>
+            <p class="what">Rahul Jayaraj</p>
+            <p class="detail thesis">Data driven reduced order modelling of transonic buffet using invariant manifolds</p>
+          </div>
+        </li>
+        <li class="entry">
+          <span class="when">2025</span>
+          <div>
+            <p class="what">Sibasish Panda</p>
+            <p class="detail thesis">Impact of actuation frequency on mean topology and breakdown past a Laminar Separation Bubble</p>
+          </div>
+        </li>
+        <li class="entry">
+          <span class="when">2025</span>
+          <div>
+            <p class="what">Milo de Leeuw</p>
+            <p class="detail thesis">Aerodynamics of a Vertical-Axis Wind Turbine Blade in Sinusoidal Inflow Conditions</p>
+          </div>
+        </li>
+        <li class="entry">
+          <span class="when">2025</span>
+          <div>
+            <p class="what">Manusankar Saju</p>
+            <p class="detail thesis">Aerodynamic wing-wake interaction during mosquito hovering</p>
+          </div>
+        </li>
+        <li class="entry">
+          <span class="when">2024</span>
+          <div>
+            <p class="what">Thijs Arends</p>
+            <p class="detail thesis">Investigation of wing kinematics influence on the aerodynamic flight of mosquitoes</p>
+          </div>
+        </li>
+        <li class="entry">
+          <span class="when">2024</span>
+          <div>
+            <p class="what">Koen Reerink (cum laude)</p>
+            <p class="detail thesis">It takes two to Tango. Advancing Flow Field and Emission Rate Estimation from Space: Insights from the TANGO mission</p>
+          </div>
+        </li>
+        <li class="entry">
+          <span class="when">2022</span>
+          <div>
+            <p class="what">Ilambharathi Govindasamy</p>
+            <p class="detail thesis">Laminar vortex shedding past a flat plate at 90°: An experimental study on the effects of acceleration and viscoelasticity</p>
+          </div>
+        </li>
+        <li class="entry">
+          <span class="when">2019</span>
+          <div>
+            <p class="what">Anand Sudha</p>
+            <p class="detail thesis">Influence of viscoelasticity on the kinematics and hydrodynamic interactions of C.Reinhardtii</p>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+  </main>
+
+  <footer>
+    <a href="../index.html">Home</a> &nbsp;&middot;&nbsp;
+    <a href="mailto:a.j.buchner@tudelft.nl">a.j.buchner@tudelft.nl</a>
+  </footer>
+
+</body>
+</html>
